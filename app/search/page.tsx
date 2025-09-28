@@ -1,15 +1,24 @@
 "use client";
 
 import { UpdateDetailForm } from "@/lib/validators/log";
-import { Travel } from "@/lib/validators/travel";
+import { BasicForm, Travel } from "@/lib/validators/travel";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { ChevronRightIcon, TrashIcon } from "@heroicons/react/24/solid";
 
 export default function Page() {
     const [travels, setTravels] = useState<Travel[]>([]);
     const router = useRouter();
+    const [searchCon, setSearchCon] = useState<BasicForm>({
+        date_start: "",
+        date_end: "",
+        destination: "",
+    });
+    // デバウンス用タイマー
+    const [debounceTimer, setDebounceTimer] = useState<NodeJS.Timeout | null>(
+        null
+    );
 
     const fetchTravels = async () => {
         try {
@@ -24,10 +33,6 @@ export default function Page() {
             return null;
         }
     };
-
-    useEffect(() => {
-        fetchTravels();
-    }, []);
 
     const fetchLogs = async (id: number) => {
         try {
@@ -90,12 +95,77 @@ export default function Page() {
         router.push(`/log/${id}`);
     };
 
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setSearchCon((prev) => ({ ...prev, [name]: value || "" }));
+    };
+
+    useEffect(() => {
+        fetchTravels();
+    }, []);
+
+    useEffect(() => {
+        if (debounceTimer) clearTimeout(debounceTimer);
+
+        const timer = setTimeout(async () => {
+            try {
+                const params = new URLSearchParams();
+                if (searchCon.date_start)
+                    params.append("date_start", searchCon.date_start);
+                if (searchCon.date_end)
+                    params.append("date_end", searchCon.date_end);
+                if (searchCon.destination)
+                    params.append("destination", searchCon.destination);
+                const res = await fetch(
+                    `http://localhost:3000/api/travel/search?${params.toString()}`,
+                    { cache: "no-store" }
+                );
+                if (!res.ok) throw new Error("Failed to fetch travel");
+                const fetchedTravels = await res.json();
+                setTravels(fetchedTravels);
+            } catch (error) {
+                console.error(error);
+                return null;
+            }
+        }, 500);
+
+        setDebounceTimer(timer);
+        // クリーンアップ
+        return () => clearTimeout(timer);
+    }, [searchCon]);
+
     return (
         <div className="flex flex-col">
+            <div>
+                <input
+                    type="date"
+                    name="date_start"
+                    onChange={handleChange}
+                    value={searchCon?.date_start}
+                />
+                <input
+                    type="date"
+                    name="date_end"
+                    onChange={handleChange}
+                    value={searchCon?.date_end}
+                />
+                <input
+                    type="text"
+                    name="destination"
+                    onChange={handleChange}
+                    value={searchCon?.destination}
+                />
+            </div>
             <ul>
                 {travels.map((travel) => (
                     <li key={travel.id} className="mb-5">
                         <div className="flex gap-x-10">
+                            <button
+                                onClick={() => deleteItem(travel.id)}
+                                className="!p-1 !m-0 !border-0 !bg-transparent !rounded-none !focus:outline-none"
+                            >
+                                <TrashIcon className="w-7 h-7" />
+                            </button>
                             <div>
                                 <div>
                                     {travel.date_start} ~ {travel.date_end}
@@ -109,12 +179,6 @@ export default function Page() {
                                 <ChevronRightIcon className="text-bold w-10 h-10" />
                             </button>
                         </div>
-                        <button
-                            onClick={() => deleteItem(travel.id)}
-                            className="!p-1 !m-0 !border-0 !bg-transparent !rounded-none !focus:outline-none"
-                        >
-                            <TrashIcon className="w-7 h-7" />
-                        </button>
                     </li>
                 ))}
             </ul>

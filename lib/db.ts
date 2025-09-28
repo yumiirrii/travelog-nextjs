@@ -66,7 +66,32 @@ export async function updateTravel(id: number, form: Travel) {
 // travel削除
 export async function deleteTravel(id: number) {
     try {
-        await sql`DELETE FROM travel WHERE id=${id}`;
+        const logCount =
+            await sql`SELECT COUNT(*) FROM log WHERE travel_id=${id}`;
+        if (logCount) {
+            // logにデータがある場合は削除しない
+            return;
+        } else {
+            await sql`DELETE FROM travel WHERE id=${id}`;
+        }
+    } catch (error) {
+        console.error("Database Error:", error);
+        throw error;
+    }
+}
+
+// travel検索
+export async function fetchTravelBySearchCon(
+    date_start: string,
+    date_end: string,
+    destination: string
+) {
+    try {
+        const rows =
+            await sql`SELECT * FROM travel WHERE (${date_end} = '' OR date_start <= ${date_end}) AND (${date_start} = '' OR date_end >= ${date_start}) AND (${destination} = '' OR destination LIKE ${
+                destination + "%"
+            }) ORDER BY date_start DESC`;
+        return z.array(TravelSchema).parse(rows);
     } catch (error) {
         console.error("Database Error:", error);
         throw error;
