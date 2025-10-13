@@ -18,7 +18,6 @@ export async function fetchTravels() {
         const rows = await sql`
         SELECT * FROM travel ORDER BY date_start DESC
         `;
-        console.log(rows);
         return z.array(TravelSchema).parse(rows);
     } catch (error) {
         console.error("Database Error:", error);
@@ -54,7 +53,6 @@ export async function insertTravel(form: BasicForm) {
 // travel更新
 export async function updateTravel(id: number, form: Travel) {
     try {
-        console.log(id, form);
         await sql`UPDATE travel SET date_start=${form.date_start}, date_end=${form.date_end}, destination=${form.destination}
         WHERE id=${id}`;
     } catch (error) {
@@ -68,7 +66,7 @@ export async function deleteTravel(id: number) {
     try {
         const logCount =
             await sql`SELECT COUNT(*) FROM log WHERE travel_id=${id}`;
-        if (logCount) {
+        if (logCount[0].count !== "0") {
             // logにデータがある場合は削除しない
             return;
         } else {

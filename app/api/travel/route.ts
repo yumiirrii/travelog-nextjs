@@ -37,7 +37,6 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
     try {
         const form = await req.json();
-        console.log(form);
         await updateTravel(form.id, form);
         return NextResponse.json({
             message: "Travel updated successfully",

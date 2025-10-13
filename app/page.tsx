@@ -5,10 +5,9 @@ export default function Home() {
         <>
             <div>
                 <span className="text-black text-[32px]">TRAVELOG</span>
-                {/* <span className="text-[#c0c0c0]">OG</span> */}
             </div>
             <div>
-                <Link href="/create/basic" className="text-black no-underline">
+                <Link href="/create" className="text-black no-underline">
                     <span className="text-[#c0c0c0] hover:text-black text-[32px]">
                         CREATE
                     </span>

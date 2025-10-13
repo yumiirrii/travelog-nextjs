@@ -1,11 +1,13 @@
 import Link from "next/link";
 
 interface Props {
+    label: string;
     href?: string;
-    onClick?: () => void;
+    onClick?: () => void | Promise<void>;
+    style?: string;
 }
 
-export default function BackButton({ href, onClick }: Props) {
+export default function Button({ label, href, onClick, style }: Props) {
     return (
         <div className="my-5">
             {href ? (
@@ -18,9 +20,9 @@ export default function BackButton({ href, onClick }: Props) {
             ) : (
                 <button
                     onClick={onClick}
-                    className="hover:bg-black hover:text-[#f5f5f5]"
+                    className={`${style} bg-black text-[#f5f5f5] hover:bg-[#f5f5f5] hover:text-black`}
                 >
-                    BACK
+                    {label}
                 </button>
             )}
         </div>

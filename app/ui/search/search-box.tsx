@@ -29,24 +29,31 @@ export default function Search({
 
     return (
         <div className="my-5">
-            <input
-                type="date"
-                name="date_start"
-                onChange={handleSearch}
-                value={searchCon?.date_start}
-            />
-            <input
-                type="date"
-                name="date_end"
-                onChange={handleSearch}
-                value={searchCon?.date_end}
-            />
-            <input
-                type="text"
-                name="destination"
-                onChange={handleSearch}
-                value={searchCon?.destination}
-            />
+            <div className="mb-5">
+                <label className="mr-5">DATE:</label>
+                <input
+                    type="date"
+                    name="date_start"
+                    onChange={handleSearch}
+                    value={searchCon?.date_start}
+                />
+                ~
+                <input
+                    type="date"
+                    name="date_end"
+                    onChange={handleSearch}
+                    value={searchCon?.date_end}
+                />
+            </div>
+            <div>
+                <label className="mr-5">DESTINATION:</label>
+                <input
+                    type="text"
+                    name="destination"
+                    onChange={handleSearch}
+                    value={searchCon?.destination}
+                />
+            </div>
         </div>
     );
 }

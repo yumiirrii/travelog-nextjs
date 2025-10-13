@@ -90,7 +90,6 @@ export default function Page() {
     const fetchSearchTravel = async (params: BasicForm) => {
         try {
             const newParams = new URLSearchParams();
-            console.log(params);
             if (params.date_start)
                 newParams.append("date_start", params.date_start);
             if (params.date_end) newParams.append("date_end", params.date_end);

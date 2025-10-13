@@ -1,6 +1,5 @@
 "use client";
 
-import DetailModal from "@/app/create/detail/page";
 import {
     CreateDetailForm,
     UpdateDetailForm,
@@ -11,7 +10,9 @@ import { Travel } from "@/lib/validators/travel";
 import { useParams, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid";
+import LogList from "@/app/ui/log/list";
+import BackButton from "@/app/ui/common/back-button";
+import DetailForm from "@/app/ui/create/detail-form";
 
 export default function Page() {
     // パスパラメータ
@@ -67,7 +68,6 @@ export default function Page() {
             } else {
                 setLogs([]);
             }
-            console.log(logs);
             setDateList(calcDates(travel.date_start, travel.date_end));
         }
     };
@@ -92,7 +92,6 @@ export default function Page() {
     };
 
     const openModal = (date: string, log: UpdateDetailForm | null) => {
-        // setSelectedDate(date === selectedDate ? null : date);
         setSelectedDate(date);
         setLog(log);
     };
@@ -173,20 +172,9 @@ export default function Page() {
         }
     };
 
-    const category: { [key: number]: string } = {
-        1: "SIGHTSEEING",
-        2: "MEAL",
-        3: "ACCOMMODATION",
-        4: "ENTERTAINMENT",
-        5: "SHOPPING",
-        6: "OTHER",
-    };
-
-    const convertCategory = (key: number) => category[key] || "UNKNOWN";
-
     const onBack = () => {
         if (from === "create") {
-            router.push(`/create/basic?id=${travelId}`);
+            router.push(`/create?id=${travelId}`);
         } else {
             router.push("/search");
         }
@@ -194,80 +182,27 @@ export default function Page() {
 
     return (
         <div className="flex flex-col gap-5">
+            <BackButton onClick={onBack} />
             <div>
                 <p>
                     {basicInfo?.date_start} ~ {basicInfo?.date_end}
                 </p>
                 <p>{basicInfo?.destination}</p>
             </div>
-            <div>
-                <ul>
-                    {dateList.map((date) => (
-                        <li key={date} className="flex flex-col">
-                            <div className="flex items-center">
-                                <div className="w-1/2">{date}</div>
-                                <button
-                                    onClick={() => openModal(date, null)}
-                                    type="submit"
-                                    className="w-auto bg-black text-[#f5f5f5] hover:bg-[#f5f5f5] hover:text-black"
-                                >
-                                    ADD
-                                </button>
-                            </div>
-                            <div className="text-[18px]">
-                                {logs
-                                    .filter((log) => log.date === date)
-                                    .map((log) => (
-                                        <div key={log.id} className="mb-5">
-                                            <div>
-                                                <p>
-                                                    {convertCategory(
-                                                        log.category
-                                                    )}
-                                                </p>
-                                                <p>{log.spot}</p>
-                                                <p>{log.note}</p>
-                                                <p>{log.expense}</p>
-                                            </div>
-                                            <button
-                                                onClick={() =>
-                                                    openModal(date, log)
-                                                }
-                                                className="!p-1 !m-0 !border-0 !bg-transparent !rounded-none !focus:outline-none"
-                                            >
-                                                <PencilSquareIcon className="w-7 h-7 mr-3" />
-                                            </button>
-                                            <button
-                                                onClick={() =>
-                                                    deleteLog(log.id)
-                                                }
-                                                className="!p-1 !m-0 !border-0 !bg-transparent !rounded-none !focus:outline-none"
-                                            >
-                                                <TrashIcon className="w-7 h-7" />
-                                            </button>
-                                        </div>
-                                    ))}
-                            </div>
-                            {selectedDate === date && basicInfo && (
-                                <DetailModal
-                                    log={log}
-                                    travel_id={basicInfo.id}
-                                    date={selectedDate}
-                                    onClose={closeModal}
-                                />
-                            )}
-                        </li>
-                    ))}
-                </ul>
-            </div>
-            <div className="flex justify-center">
-                <button
-                    onClick={onBack}
-                    className="hover:bg-black hover:text-[#f5f5f5]"
-                >
-                    BACK
-                </button>
-            </div>
+            <LogList
+                dateList={dateList}
+                logs={logs}
+                onDetail={openModal}
+                onDelete={deleteLog}
+            />
+            {selectedDate && basicInfo && (
+                <DetailForm
+                    log={log}
+                    travel_id={basicInfo.id}
+                    date={selectedDate}
+                    onClose={closeModal}
+                />
+            )}
         </div>
     );
 }

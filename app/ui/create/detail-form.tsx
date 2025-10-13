@@ -11,7 +11,7 @@ type Props = {
     ) => void;
 };
 
-export default function DetailModal({ log, travel_id, date, onClose }: Props) {
+export default function DetailForm({ log, travel_id, date, onClose }: Props) {
     const isEdit: boolean = !!log; //log ? true : falseと同義;
     const [detailForm, setDetailForm] = useState<
         CreateDetailForm | UpdateDetailForm
