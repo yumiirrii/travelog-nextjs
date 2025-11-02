@@ -1,4 +1,5 @@
 import "./globals.css";
+import { Menu } from "./ui/common/menu";
 
 export default function RootLayout({
     children,
@@ -7,10 +8,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className="bg-[#f5f5f5] font-bold text-[28px] font-[Manrope]">
-                <main className="flex justify-center items-center min-h-screen pt-10 pb-10">
-                    {children}
-                </main>
+            <body className="bg-[#f5f5f5] font-bold text-lg font-[Manrope] flex min-h-screen">
+                <Menu />
+                <main className="ml-64 flex-1 p-10">{children}</main>
             </body>
         </html>
     );

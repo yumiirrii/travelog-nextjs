@@ -11,7 +11,7 @@ export default function BackButton({ href, onClick }: Props) {
             {href ? (
                 <Link
                     href={href}
-                    className="px-4 py-2 text-lg rounded-lg border-2 border-solid hover:bg-black hover:text-[#f5f5f5]"
+                    className="px-2.5 py-1.5 text-base rounded-lg border border-solid hover:bg-black hover:text-[#f5f5f5]"
                 >
                     BACK
                 </Link>

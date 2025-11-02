@@ -10,6 +10,7 @@ interface Props {
 }
 
 export default function LogList({ logs, dateList, onDetail, onDelete }: Props) {
+    // const [expenseTotal, setExpenseTotal] = useState<string>("");
     const category: { [key: number]: string } = {
         1: "SIGHTSEEING",
         2: "MEAL",
@@ -19,46 +20,67 @@ export default function LogList({ logs, dateList, onDetail, onDelete }: Props) {
         6: "OTHER",
     };
 
+    const calcDailyTotalExpense = (date: string) => {
+        const total = logs
+            .filter((log) => log.date === date && log.expense)
+            .reduce((sum, log) => sum + Number(log.expense), 0);
+        return total > 0 ? total.toLocaleString() : "";
+    };
+
     const convertCategory = (key: number) => category[key] || "UNKNOWN";
 
     return (
         <div>
             <ul>
                 {dateList.map((date) => (
-                    <li key={date} className="flex flex-col">
-                        <div className="flex items-center">
-                            <div className="w-1/2">{date}</div>
-                            <Button
-                                label="ADD"
-                                onClick={() => onDetail(date, null)}
-                                style="w-auto"
-                            />
+                    <li key={date} className="flex flex-col gap-y-5">
+                        <div>
+                            <div className="flex items-center">
+                                <span>{date}</span>
+                                <Button
+                                    label="ADD"
+                                    onClick={() => onDetail(date, null)}
+                                    style="ml-5"
+                                />
+                            </div>
+                            <div>{calcDailyTotalExpense(date)}</div>
                         </div>
-                        <div className="text-[18px]">
+                        <div>
                             {logs
                                 .filter((log) => log.date === date)
                                 .map((log) => (
-                                    <div key={log.id} className="mb-5">
+                                    <div
+                                        key={log.id}
+                                        className="mb-5 ml-5 text-base font-normal"
+                                    >
                                         <div>
                                             <p>
                                                 {convertCategory(log.category)}
                                             </p>
                                             <p>{log.spot}</p>
                                             <p>{log.note}</p>
-                                            <p>{log.expense}</p>
+                                            <p>
+                                                {Number(
+                                                    log.expense
+                                                ).toLocaleString()}
+                                            </p>
                                         </div>
-                                        <button
-                                            onClick={() => onDetail(date, log)}
-                                            className="!p-1 !m-0 !border-0 !bg-transparent !rounded-none !focus:outline-none"
-                                        >
-                                            <PencilSquareIcon className="w-7 h-7 mr-3" />
-                                        </button>
-                                        <button
-                                            onClick={() => onDelete(log.id)}
-                                            className="!p-1 !m-0 !border-0 !bg-transparent !rounded-none !focus:outline-none"
-                                        >
-                                            <TrashIcon className="w-7 h-7" />
-                                        </button>
+                                        <div className="mt-2">
+                                            <button
+                                                onClick={() =>
+                                                    onDetail(date, log)
+                                                }
+                                                className="!p-1 !m-0 !border-0 !bg-transparent !rounded-none !focus:outline-none"
+                                            >
+                                                <PencilSquareIcon className="w-6 h-6 mr-3" />
+                                            </button>
+                                            <button
+                                                onClick={() => onDelete(log.id)}
+                                                className="!p-1 !m-0 !border-0 !bg-transparent !rounded-none !focus:outline-none"
+                                            >
+                                                <TrashIcon className="w-6 h-6" />
+                                            </button>
+                                        </div>
                                     </div>
                                 ))}
                         </div>

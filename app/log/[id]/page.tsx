@@ -28,6 +28,7 @@ export default function Page() {
     const [dateList, setDateList] = useState<string[]>([]);
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
     const [log, setLog] = useState<UpdateDetailForm | null>(null);
+    const [totalExpense, setTotalExpense] = useState<string>("");
 
     const fetchTravel = async (id: number) => {
         try {
@@ -65,6 +66,11 @@ export default function Page() {
             setBasicInfo(travel);
             if (logs) {
                 setLogs(logs);
+                const total = logs.reduce(
+                    (sum, log) => sum + Number(log.expense),
+                    0
+                );
+                if (total > 0) setTotalExpense(total.toLocaleString());
             } else {
                 setLogs([]);
             }
@@ -181,13 +187,14 @@ export default function Page() {
     };
 
     return (
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col">
             <BackButton onClick={onBack} />
-            <div>
-                <p>
+            <div className="py-5 flex flex-col text-xl">
+                <span>
                     {basicInfo?.date_start} ~ {basicInfo?.date_end}
-                </p>
-                <p>{basicInfo?.destination}</p>
+                </span>
+                <span>{basicInfo?.destination}</span>
+                <span>{totalExpense}</span>
             </div>
             <LogList
                 dateList={dateList}

@@ -51,11 +51,11 @@ export default function DetailForm({ log, travel_id, date, onClose }: Props) {
             {/* overlay */}
             <div className="fixed inset-0 bg-black opacity-70 z-40"></div>
             {/* modal content */}
-            <div className="fixed inset-0 flex justify-center items-center z-50 text-[24px]">
+            <div className="fixed inset-0 flex justify-center items-center z-50">
                 <div className="w-4/5 max-w-4xl max-h-[90vh] bg-white p-8 flex flex-col gap-5 overflow-y-auto">
-                    <div>DATE : {detailForm.date}</div>
+                    <div className="text-xl">DATE : {detailForm.date}</div>
                     <div>
-                        <div className="flex flex-wrap gap-x-8 text-[20px]">
+                        <div className="flex flex-wrap gap-x-8">
                             <div className="flex items-center gap-x-2">
                                 <input
                                     type="radio"
@@ -119,7 +119,7 @@ export default function DetailForm({ log, travel_id, date, onClose }: Props) {
                         </div>
                     </div>
                     <div>
-                        <label className="mr-11 text-[20px]">SPOT : </label>
+                        <label className="mr-11">SPOT : </label>
                         <input
                             type="text"
                             name="spot"
@@ -128,7 +128,7 @@ export default function DetailForm({ log, travel_id, date, onClose }: Props) {
                         ></input>
                     </div>
                     <div className="flex items-start">
-                        <label className="mr-12 text-[20px]">NOTE : </label>
+                        <label className="mr-12">NOTE : </label>
                         <textarea
                             name="note"
                             value={detailForm.note}
@@ -136,7 +136,7 @@ export default function DetailForm({ log, travel_id, date, onClose }: Props) {
                         ></textarea>
                     </div>
                     <div>
-                        <label className="mr-2 text-[20px]">EXPENSE : </label>
+                        <label className="mr-2">EXPENSE : </label>
                         <input
                             type="text"
                             name="expense"
@@ -144,7 +144,7 @@ export default function DetailForm({ log, travel_id, date, onClose }: Props) {
                             onChange={handleChange}
                         ></input>
                     </div>
-                    <div className="flex justify-center">
+                    <div className="flex justify-center gap-x-3">
                         <button
                             type="submit"
                             className="hover:bg-black hover:text-[#f5f5f5]"

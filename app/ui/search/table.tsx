@@ -8,33 +8,41 @@ interface Props {
 }
 export default function Table({ travels, onDelete, onLog }: Props) {
     return (
-        <div className="my-5">
-            <ul>
+        <table>
+            <thead>
+                <tr>
+                    <th className="px-3 py-3"></th>
+                    <th className="px-3 py-3">TRAVEL DATE</th>
+                    <th className="px-3 py-3">DESTINATION</th>
+                    <th className="px-3 py-3"></th>
+                </tr>
+            </thead>
+            <tbody>
                 {travels.map((travel) => (
-                    <li key={travel.id} className="mb-5">
-                        <div className="flex gap-x-10">
+                    <tr key={travel.id}>
+                        <td className="px-3 py-1">
                             <button
                                 onClick={() => onDelete(travel.id)}
                                 className="!p-1 !m-0 !border-0 !bg-transparent !rounded-none !focus:outline-none"
                             >
-                                <TrashIcon className="w-7 h-7" />
+                                <TrashIcon className="w-6 h-6" />
                             </button>
-                            <div>
-                                <div>
-                                    {travel.date_start} ~ {travel.date_end}
-                                </div>
-                                <div>{travel.destination}</div>
-                            </div>
+                        </td>
+                        <td className="px-3 py-1">
+                            {travel.date_start} ~ {travel.date_end}
+                        </td>
+                        <td className="px-3 py-1">{travel.destination}</td>
+                        <td className="px-3 py-1">
                             <button
                                 onClick={() => onLog(travel.id)}
                                 className="!p-1 !m-0 !border-0 !bg-transparent !rounded-none !focus:outline-none"
                             >
-                                <ChevronRightIcon className="text-bold w-10 h-10" />
+                                <ChevronRightIcon className="text-bold w-6 h-6" />
                             </button>
-                        </div>
-                    </li>
+                        </td>
+                    </tr>
                 ))}
-            </ul>
-        </div>
+            </tbody>
+        </table>
     );
 }

@@ -129,7 +129,11 @@ export default function Page() {
                 basicForm={basicForm}
                 setBasicForm={setBasicForm}
             />
-            <Button label="NEXT" onClick={handleSubmit} />
+            <Button
+                label="NEXT"
+                onClick={handleSubmit}
+                parentStyle="flex justify-center"
+            />
         </div>
     );
 }
