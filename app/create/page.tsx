@@ -132,7 +132,7 @@ export default function Page() {
             <Button
                 label="NEXT"
                 onClick={handleSubmit}
-                parentStyle="flex justify-center"
+                parentStyle="flex justify-center mt-5"
             />
         </div>
     );

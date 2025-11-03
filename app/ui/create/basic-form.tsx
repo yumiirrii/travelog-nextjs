@@ -16,7 +16,7 @@ export default function CreateBasicForm({ basicForm, setBasicForm }: Props) {
 
     return (
         <form className="flex justify-center items-center h-full">
-            <div className="flex flex-col gap-10 my-5">
+            <div className="flex flex-col my-5 gap-y-5">
                 <div>
                     <label>TRAVEL DATE</label>
                     <div className="mt-3">
